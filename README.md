@@ -1,0 +1,2 @@
+# AzureResourceTemplates
+Demo templates
