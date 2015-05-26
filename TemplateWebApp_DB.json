@@ -149,11 +149,11 @@
                     ],
                     "properties": {
                         "alwaysOn": true,
-                        "use32BitWorkerProcess": false, /* 64-bit platform */
-                        "requestTracingEnabled": true, /* Failed request tracing, aka 'freb' */
-                        "httpLoggingEnabled": true, /* IIS logs (aka Web server logging) */
-                        "logsDirectorySizeLimit": 40, /* 40 MB limit for IIS logs */
-                        "detailedErrorLoggingEnabled": true, /* Detailed error messages  */
+                        "use32BitWorkerProcess": false, 
+                        "requestTracingEnabled": true, 
+                        "httpLoggingEnabled": true, 
+                        "logsDirectorySizeLimit": 40, 
+                        "detailedErrorLoggingEnabled": true, 
                         "phpVersion": ""
                     }
                 },
