@@ -2,21 +2,19 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "demoName": {
+    "StorageName": {
       "type": "string"
     },
-    "demoType": {
+    "environmentName": {
       "type": "string",
-      "defaultValue": "Standard_LRS",
       "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_ZRS"
-      ]
+        "test",
+        "prod"
+     ]
     },
-    "demoLocation": {
+    "Location": {
       "type": "string",
-      "defaultValue": "West US",
+      "defaultValue": "West Europe",
       "allowedValues": [
         "East US",
         "West US",
@@ -27,26 +25,33 @@
     }
   },
   "variables": {
+    "environmentSettings": {
+           "test": { "storageType": "Standard_LRS" },
+           "prod": { "storageType": "Standard_GRS" }
+       },
+       "currentEnvironmentSettings": "[variables('environmentSettings')[parameters('environmentName')]]",
+       "accountType": "[variables('currentEnvironmentSettings').storageType]"
   },
   "resources": [
     {
-      "name": "[parameters('demoName')]",
+      "name": "[parameters('StorageName')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "location": "[parameters('demoLocation')]",
+      "location": "[parameters('Location')]",
       "apiVersion": "2015-05-01-preview",
       "dependsOn": [ ],
       "tags": {
         "displayName": "demo"
       },
       "properties": {
-        "accountType": "[parameters('demoType')]"
+        "accountType": "[variables('accountType')]"
       }
     }
   ],
   "outputs": {
     "storageKey": {
       "type": "string",
-      "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('demoName')), '2015-05-01-preview').key1]"
-    }
+      "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageName')), '2015-05-01-preview').key1]"
+    },
+    "accountType" : { "type": "string", "value": "[variables('accountType')]"}
   }
 }
