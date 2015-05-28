@@ -6,11 +6,12 @@
             "type": "string"
         },
         "hostingPlanName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "myHostingPlan"
         },
         "hostingEnvironment": {
             "type": "string",
-            "defaultValue": ""
+            "defaultValue": "myEnvironment"
         },
         "siteLocation": {
             "type": "string",
@@ -40,7 +41,8 @@
             "type": "string"
         },
         "administratorLogin": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "sqlAzureLogin"
         },
         "administratorLoginPassword": {
             "type": "securestring"
