@@ -1,0 +1,116 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serverName": {
+            "type": "string"
+        },
+        "serverLocation": {
+            "type": "string"
+        },
+        "administratorLogin": {
+            "type": "string"
+        },
+        "administratorLoginPassword": {
+            "type": "securestring"
+        },
+        "databaseName": {
+            "type": "string"
+        },
+        "collation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "edition": {
+            "type": "string",
+            "defaultValue": "Standard"
+        },
+        "editionServiceLevel": {
+            "type": "string",
+            "defaultValue": "S0"
+        },
+        "maxSizeBytes": {
+            "type": "string",
+            "defaultValue": "268435456000"
+        },
+        "DBImportStorageKeyType": {
+            "type": "string"
+        },
+        "DBImportStorageKey": {
+            "type": "securestring"
+        },
+        "DBImportStorageUri": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('serverName')]",
+            "type": "Microsoft.Sql/servers",
+            "location": "[parameters('serverLocation')]",
+            "tags": {
+                "displayName": "SqlServer"
+            },
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
+            },
+            "resources": [
+                {
+                    "name": "[parameters('databaseName')]",
+                    "type": "databases",
+                    "location": "[parameters('serverLocation')]",
+                    "tags": {
+                        "displayName": "Database"
+                    },
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+                    ],
+                    "properties": {
+                        "edition": "[parameters('edition')]",
+                        "collation": "[parameters('collation')]",
+                        "serviceLevelObjective": "[parameters('editionServiceLevel')]",
+                        "maxSizeBytes": "[parameters('maxSizeBytes')]"
+                    },
+                    "resources": [
+                        {
+                            "name": "Import",
+                            "type": "extensions",
+                            "apiVersion": "2014-04-01-preview",
+                            "dependsOn": [
+                                "[parameters('databaseName')]"
+                            ],
+                            "tags": {
+                                "displayName": "DB Import"
+                            },
+                            "properties": {
+                                "storageKeyType": "[parameters('DBImportStorageKeyType')]",
+                                "storageKey": "[parameters('DBImportStorageKey')]",
+                                "storageUri": "[parameters('DBImportStorageUri')]",
+                                "administratorLogin": "[parameters('administratorLogin')]",
+                                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                                "operationMode": "Import"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "firewallrules",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+                    ],
+                    "location": "[parameters('serverLocation')]",
+                    "name": "AllowAllWindowsAzureIps",
+                    "properties": {
+                        "endIpAddress": "0.0.0.0",
+                        "startIpAddress": "0.0.0.0"
+                    }
+                }
+            ]
+        }
+
+    ]
+}
