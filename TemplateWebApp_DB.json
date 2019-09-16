@@ -15,7 +15,7 @@
         },
         "siteLocation": {
             "type": "string",
-            "defaultValue": "West Europe"
+            "defaultValue": "westeurope"
         },
         "sku": {
             "type": "string",
@@ -48,7 +48,8 @@
             "type": "securestring"
         },
         "databaseName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "myDatabase"
         },
         "collation": {
             "type": "string",
